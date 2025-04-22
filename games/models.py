@@ -68,7 +68,10 @@ class PlayerGame(models.Model):
         choices=MulliganCount.choices,
         default=MulliganCount.NONE,
     )
-    concede = models.BooleanField(default=False, verbose_name="Concession")
+    concede = models.BooleanField(
+        default=False,
+        verbose_name="Concession",
+    )
 
     def __str__(self):
         return f"{self.player.display_name} in Game {self.game}"

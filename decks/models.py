@@ -18,7 +18,7 @@ class Deck(models.Model):
     date_updated = models.DateField(auto_now=True, null=False)
     active = models.BooleanField(
         default=True,
-        verbose_name="Active",
+        verbose_name="Active Status",
     )
 
     def __str__(self):
