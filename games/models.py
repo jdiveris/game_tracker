@@ -45,8 +45,7 @@ class PlayerGame(models.Model):
         null=True,
     )
     game = models.ForeignKey(
-        "Game",
-        on_delete=models.CASCADE,
+        "Game", on_delete=models.CASCADE, related_name="player_games"
     )
     deck = models.ForeignKey(
         "decks.Deck",
@@ -61,4 +60,4 @@ class PlayerGame(models.Model):
     concede = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.player.user.username} in Game {self.game}"
+        return f"{self.player.display_name} in Game {self.game}"

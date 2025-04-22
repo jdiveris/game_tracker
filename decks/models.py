@@ -12,6 +12,7 @@ class Deck(models.Model):
     description = models.CharField(max_length=140)
     date_added = models.DateField(auto_now_add=True, null=False)
     date_updated = models.DateField(auto_now=True, null=False)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.created_by.display_name} | {self.commander_name}"
+        return f"{self.commander_name} | {self.created_by.display_name}"
