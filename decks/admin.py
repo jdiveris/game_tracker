@@ -17,10 +17,5 @@ class DeckAdmin(admin.ModelAdmin):
             return self.readonly_fields + ("created_by",)
         return self.readonly_fields
 
-    def save_model(self, request, obj, form, change):
-        if not change:
-            obj.created_by = request.user.profile
-        return super().save_model(request, obj, form, change)
-
 
 admin.site.register(Deck, DeckAdmin)

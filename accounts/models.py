@@ -1,7 +1,6 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Profile(AbstractUser):
     display_name = models.CharField(max_length=12, blank=True)

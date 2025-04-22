@@ -1,21 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from .forms import ProfileCreationForm, ProfileChangeForm
 from .models import Profile
 
 
-class ProfileInline(admin.StackedInline):
-    model = Profile
-    can_delete = False
-    verbose_name_plural = "Profile"
-
-
 class ProfileAdmin(UserAdmin):
-    inlines = (ProfileInline,)
     add_form = ProfileCreationForm
     form = ProfileChangeForm
+    model = Profile
 
     def display_name(self, obj):
         return obj.profile.display_name
@@ -26,6 +20,8 @@ class ProfileAdmin(UserAdmin):
         "display_name",
     ]
 
+    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ("display_name",)}),)
+    add_fieldsets = UserAdmin.add_fieldsets + ((None, {"fields": ("display_name",)}),)
 
-admin.site.unregister(User)
-admin.site.register(User, ProfileAdmin)
+
+admin.site.register(get_user_model(), ProfileAdmin)
