@@ -11,9 +11,6 @@ class ProfileAdmin(UserAdmin):
     form = ProfileChangeForm
     model = Profile
 
-    def display_name(self, obj):
-        return obj.profile.display_name
-
     list_display = [
         "username",
         "email",
