@@ -3,6 +3,10 @@ from .models import Deck
 
 
 class DeckAdmin(admin.ModelAdmin):
+    list_filter = [
+        "created_by",
+        "active",
+    ]
     list_display = [
         "commander_name",
         "created_by",

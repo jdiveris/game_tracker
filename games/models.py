@@ -8,22 +8,31 @@ class Game(models.Model):
         on_delete=models.SET_NULL,
         related_name="games_won",
         null=True,
+        verbose_name="Winner",
     )
     turn_1 = models.ForeignKey(
         "accounts.Profile",
         on_delete=models.SET_NULL,
         related_name="games_started",
         null=True,
+        verbose_name="Went First",
     )
     first_elim = models.ForeignKey(
         "accounts.Profile",
         on_delete=models.SET_NULL,
         related_name="games_first_out",
         null=True,
+        verbose_name="First Out",
     )
-    win_condition = models.CharField(max_length=70)
+    win_condition = models.CharField(
+        max_length=70,
+        verbose_name="Win Condition",
+    )
     notes = models.TextField(max_length=280)
-    draw = models.BooleanField(default=False)
+    draw = models.BooleanField(
+        default=False,
+        verbose_name="Draw",
+    )
 
     def __str__(self):
         return f"{self.date} {self.id}"
@@ -45,7 +54,9 @@ class PlayerGame(models.Model):
         null=True,
     )
     game = models.ForeignKey(
-        "Game", on_delete=models.CASCADE, related_name="player_games"
+        "Game",
+        on_delete=models.CASCADE,
+        related_name="player_games",
     )
     deck = models.ForeignKey(
         "decks.Deck",
@@ -57,7 +68,7 @@ class PlayerGame(models.Model):
         choices=MulliganCount.choices,
         default=MulliganCount.NONE,
     )
-    concede = models.BooleanField(default=False)
+    concede = models.BooleanField(default=False, verbose_name="Concession")
 
     def __str__(self):
         return f"{self.player.display_name} in Game {self.game}"
