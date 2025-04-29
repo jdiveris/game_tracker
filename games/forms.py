@@ -7,7 +7,7 @@ from accounts.models import Profile
 class PlayerGameForm(forms.ModelForm):
     class Meta:
         model = PlayerGame
-        fields = ["player", "deck", "mulligan", "concede"]
+        fields = ("player", "deck", "mulligan", "concede")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

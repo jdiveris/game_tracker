@@ -25,7 +25,7 @@ def get_annotated_players(player_filter=None):
         # Add field for # of wins
         wins=Count("games_won", distinct=True),
         # Add field for # of games
-        games_played=Count("player", distinct=True),
+        games_played=Count("player_games", distinct=True),
         # Add field for win rate
         winrate=ExpressionWrapper(
             F("wins") * 1.0 / NullIf(F("games_played"), 0),
@@ -36,18 +36,18 @@ def get_annotated_players(player_filter=None):
 
 def get_annotated_decks(player_filter=None):
     # Get all Deck objs
-    qs = Deck.objects.all()
+    qs = Deck.objects.filter(active=True)
 
     if player_filter:  # If player filter is set
         # Only get decks played by this player
-        qs = qs.filter(deck__player=player_filter)
+        qs = qs.filter(player_games__player=player_filter)
 
     return qs.annotate(
         # Add field for # of wins
         wins=Count(
             Case(
                 When(  # Only count decks that were played by winning player
-                    deck__player=F("deck__game__winner"),
+                    player_games__player=F("player_games__game__winner"),
                     then=1,
                 ),
                 output_field=IntegerField(),
@@ -55,7 +55,7 @@ def get_annotated_decks(player_filter=None):
             distinct=True,
         ),
         # Add field for # of games
-        games_played=Count("deck", distinct=True),
+        games_played=Count("player_games", distinct=True),
         # Add field for win rate
         winrate=ExpressionWrapper(
             F("wins") * 1.0 / NullIf(F("games_played"), 0),

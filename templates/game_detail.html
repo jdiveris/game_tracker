@@ -6,14 +6,13 @@
     <div class="card-header text-center">
       <h2 class="mb-0">{{ object.date }}</h2>
       <small class="text-muted">
-        {% if object.winner %}
-          Winner: {{ object.winner.display_name }}
-        {% else %}
-          Winner: N/A
-        {% endif %}
+      {% if object.winner %}
+        Winner: {{ object.winner.display_name }}
+      {% else %}
+        Winner: N/A
+      {% endif %}
       </small>
     </div>
-
     <div class="card-body">
       <div class="row">
         <!-- Left Column -->
@@ -22,7 +21,6 @@
           <p><strong>Draw:</strong> {{ object.draw|yesno:"Yes,No" }}</p>
           <p><strong>Win Condition:</strong> {{ object.win_condition }}</p>
         </div>
-
         <!-- Right Column -->
         <div class="col-md-6">
           <h5>Players & Decks</h5>
@@ -57,11 +55,10 @@
           </ul>
         </div>
       </div>
-
       {% if object.notes %}
-      <hr>
-      <h5>Notes</h5>
-      <p>{{ object.notes|linebreaks }}</p>
+        <hr>
+        <h5>Notes</h5>
+        <p>{{ object.notes|linebreaks }}</p>
       {% endif %}
     </div>
   </div>

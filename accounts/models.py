@@ -4,3 +4,4 @@ from django.db import models
 
 class Profile(AbstractUser):
     display_name = models.CharField(max_length=12, blank=True)
+    bio = models.TextField(null=True)

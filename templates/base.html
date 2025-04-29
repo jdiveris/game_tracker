@@ -69,7 +69,7 @@
                 Profile
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                  <li><a class="dropdown-item" href="">Account</a></li>
+                  <li><a class="dropdown-item" href="{% url 'profile_detail' pk=user.pk %}">Account</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li>
                   <form method="post" action="{% url 'logout' %}" style="display:inline;">

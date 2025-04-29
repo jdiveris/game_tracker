@@ -71,7 +71,7 @@ class PlayerGame(models.Model):
     player = models.ForeignKey(
         "accounts.Profile",
         on_delete=models.SET_NULL,
-        related_name="player",
+        related_name="player_games",
         null=True,
     )
     game = models.ForeignKey(
@@ -82,7 +82,7 @@ class PlayerGame(models.Model):
     deck = models.ForeignKey(
         "decks.Deck",
         on_delete=models.SET_NULL,
-        related_name="deck",
+        related_name="player_games",
         null=True,
     )
     mulligan = models.IntegerField(

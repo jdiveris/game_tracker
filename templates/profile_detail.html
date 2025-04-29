@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h3>{{ profile.username }}</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Username:</strong> {{ profile.username }}</p>
+            <p><strong>Display Name:</strong> {{ profile.display_name }}</p>
+            {% if profile.bio %}
+                <p><strong>Bio:</strong> {{ profile.bio }}</p>
+            {% else %}
+                <p><strong>Bio:</strong> <span class="text-muted"><em>No bio yet.</em></span></p>
+            {% endif %}
+        </div>
+        {% if profile.pk == request.user.pk %}
+            <div class="card-footer text-end">
+                <a href="{% url 'profile_edit' pk=user.pk %}" class="btn btn-primary">Edit Profile</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

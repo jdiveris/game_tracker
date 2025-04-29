@@ -1,6 +1,5 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.cache import cache
 from common.stats_services import get_annotated_decks, get_annotated_players
 from games.models import Game
 
@@ -13,21 +12,11 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         # Get context obj
         context = super().get_context_data(**kwargs)
 
-        # Check cache for query data
-        games = cache.get("recent_games")
+        # Get 5 most recent games from database
+        games = Game.objects.order_by("-date")[:5]
 
-        if not games:  # If not in cache
-            # Get 5 most recent games from database
-            games = Game.objects.order_by("-date")[:5]
-            cache.set("recent_games", games, 300)  # Cache them for 5 min
-
-        # Check cache for query data
-        decks = cache.get("most_played_decks")
-
-        if not decks:  # If not in cache
-            # Get 5 most played Decks from database
-            decks = get_annotated_decks(self.request.user).order_by("-games_played")[:5]
-            cache.set("most_played_decks", decks, 300)
+        # Get 5 most played Decks from database
+        decks = get_annotated_decks(self.request.user).order_by("-games_played")[:5]
 
         # Add to context object
         context["recent_games"] = games
@@ -46,19 +35,9 @@ class StatsPageView(LoginRequiredMixin, TemplateView):
         # Default the display to sort by winrate
         sort_by = self.request.GET.get("sort_by", "winrate")
 
-        # Attempt to get cached player data
-        players = cache.get("player_leaderboard")
+        players = get_annotated_players()  # Get player data from db
 
-        if not players:  # If data is not in the cache
-            players = get_annotated_players()  # Get player data from db
-            cache.set("player_leaderboard", players, 300)
-
-        # Attempt to get cached deck data
-        decks = cache.get("deck_leaderboard")
-
-        if not decks:  # If data is not in the cache
-            decks = get_annotated_decks()  # Get deck data from db
-            cache.set("decks_leaderboard", decks, 300)
+        decks = get_annotated_decks()  # Get deck data from db
 
         # Order the display based on sort selection (winrate is default)
         if sort_by == "winrate":
@@ -70,7 +49,7 @@ class StatsPageView(LoginRequiredMixin, TemplateView):
 
         # Add to context object
         context["player_leaderboard"] = players
-        context["decks_leaderboard"] = decks
+        context["deck_leaderboard"] = decks
 
         return context
 
@@ -85,19 +64,11 @@ class UserStatsPageView(LoginRequiredMixin, TemplateView):
         # Default the display to sort by winrate
         sort_by = self.request.GET.get("sort_by", "winrate")
 
-        # Attempt to get cached player data
-        player = cache.get("player_leaderboard")
+        # Get player data from db
+        player = get_annotated_players(self.request.user).first()
 
-        if not player:  # If data is not in the cache
-            player = get_annotated_players(self.request.user)  # Get player data from db
-            cache.set("player_leaderboard", player, 300)
-
-        # Attempt to get cached deck data
-        decks = cache.get("deck_leaderboard")
-
-        if not decks:  # If data is not in the cache
-            decks = get_annotated_decks(self.request.user)  # Get deck data from db
-            cache.set("decks_leaderboard", decks, 300)
+        # Get deck data from db
+        decks = get_annotated_decks(self.request.user)
 
         # Order the display based on sort selection (winrate is default)
         if sort_by == "winrate":

@@ -1,13 +1,26 @@
 from django.views.generic.edit import CreateView, UpdateView
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+from django.views.generic import DetailView
 from django.urls import reverse_lazy
-from .models import Profile
 from .forms import ProfileCreationForm
+from .models import Profile
 
 
 class ProfileSignupView(CreateView):
     form_class = ProfileCreationForm
     success_url = reverse_lazy("login")
     template_name = "./templates/registration/signup.html"
+
+
+class ProfileDetailView(DetailView):
+    model = Profile
+    template_name = "profile_detail.html"
+    context_object_name = "profile"
+
+
+class ProfileUpdateView(UpdateView):
+    model = Profile
+    fields = ("username", "display_name", "bio")
+    template_name = "profile_edit.html"
+
+    def get_success_url(self):
+        return reverse_lazy("profile_detail", kwargs={"pk": self.request.user.pk})

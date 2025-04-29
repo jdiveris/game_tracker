@@ -1,11 +1,10 @@
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
-    UserPassesTestMixin,
 )
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy
-from django.core import cache
+from django.shortcuts import redirect
 from .models import Game
 from .forms import PlayerGameFormSet
 
@@ -34,7 +33,7 @@ class GameDetailView(LoginRequiredMixin, DetailView):
 
 class GameCreateView(LoginRequiredMixin, CreateView):
     model = Game
-    fields = [
+    fields = (
         "date",
         "winner",
         "turn_1",
@@ -42,7 +41,7 @@ class GameCreateView(LoginRequiredMixin, CreateView):
         "win_condition",
         "notes",
         "draw",
-    ]
+    )
     template_name = "game_form.html"
 
     def get_context_data(self, **kwargs):
@@ -70,20 +69,14 @@ class GameCreateView(LoginRequiredMixin, CreateView):
             playergame_formset.instance = game  # Link playergames and game
             playergame_formset.save()  # Save playergames
 
-            # Reset cached data
-            cache.delete("recent_games")
-            cache.delete("most_played_decks")
-            cache.delete("player_leaderboard")
-            cache.delete("deck_leaderboard")
-
-            success_url = reverse_lazy("all_games")  # Redirect to games/list
+            return redirect("all_games")  # Redirect to games/list
         else:
             return self.form_invalid(form)
 
 
 class GameUpdateView(LoginRequiredMixin, UpdateView):
     model = Game
-    fields = [
+    fields = (
         "date",
         "winner",
         "turn_1",
@@ -91,7 +84,7 @@ class GameUpdateView(LoginRequiredMixin, UpdateView):
         "win_condition",
         "notes",
         "draw",
-    ]
+    )
     template_name = "game_form.html"  # Use same form template as create
 
     def get_context_data(self, **kwargs):
@@ -119,13 +112,7 @@ class GameUpdateView(LoginRequiredMixin, UpdateView):
             playergame_formset.instance = self.object  # Link playergames and game
             playergame_formset.save()  # Save playergames
 
-            # Reset cached data
-            cache.delete("recent_games")
-            cache.delete("most_played_decks")
-            cache.delete("player_leaderboard")
-            cache.delete("deck_leaderboard")
-
-            success_url = reverse_lazy("all_games")  # Redirect to games/list
+            return redirect("all_games")  # Redirect to games/list
         else:
             return self.form_invalid(form)
 
