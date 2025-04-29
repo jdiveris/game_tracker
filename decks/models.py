@@ -7,6 +7,7 @@ class Deck(models.Model):
         "accounts.Profile",
         on_delete=models.CASCADE,
         related_name="decks_created_by",
+        blank=True,
         verbose_name="Owner",
     )
     commander_name = models.CharField(

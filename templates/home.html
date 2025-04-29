@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <!-- Main Content Column -->
+    <div class="col-lg-8">
+      {% for game in recent_games %}
+      <div class="card mb-4">
+        <div class="card-header">
+          <span class="fw-bold">
+            <a href="{{ game.get_absolute_url }}">{{ game.date }}</a>
+          </span>
+          &middot;
+          <span class="text-muted">
+            Winner: {{ game.winner.display_name }} |
+            {{ game.winning_deck.commander_name }}
+          </span>
+        </div>
+        <div class="card-body">
+          <b>Win Condition:</b> {{ game.win_condition }}<br>
+          <span class="text-muted">{{ game.description }}</span>
+        </div>
+        <div class="card-footer text-center text-muted">
+          <a href="#">Edit</a> | <a href="#">Delete</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Sidebar Column -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Your Most Played Decks</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for deck in most_played_decks %}
+          <li class="list-group-item">
+            <strong>{{ deck.commander_name }}</strong>
+            <br>
+            <small class="text-muted">Games Played: {{ deck.games_played }}</small><br>
+            <small class="text-muted">Winrate: {{ deck.winrate|floatformat:2 }}%</small>
+          </li>
+          {% empty %}
+          <li class="list-group-item text-muted">No decks found.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

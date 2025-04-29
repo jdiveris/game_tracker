@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-4">
+  <div class="card shadow-sm">
+    <div class="card-header text-center">
+      <h2 class="mb-0">{{ object.date }}</h2>
+      <small class="text-muted">
+        {% if object.winner %}
+          Winner: {{ object.winner.display_name }}
+        {% else %}
+          Winner: N/A
+        {% endif %}
+      </small>
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <!-- Left Column -->
+        <div class="col-md-6">
+          <h5>Game Summary</h5>
+          <p><strong>Draw:</strong> {{ object.draw|yesno:"Yes,No" }}</p>
+          <p><strong>Win Condition:</strong> {{ object.win_condition }}</p>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-md-6">
+          <h5>Players & Decks</h5>
+          <ul class="list-group list-group-flush">
+            {% for player_game in players_in_game %}
+              <li class="list-group-item">
+                <strong>{{ player_game.deck.commander_name }}</strong> 
+                <small class="text-muted">({{ player_game.player.display_name }})</small>
+
+                <!-- Badges for player statuses -->
+                {% if object.turn_1 and player_game.player.pk == object.turn_1.pk %}
+                  <span class="badge bg-primary">First Player</span>
+                {% endif %}
+
+                {% if object.first_elim and player_game.player.pk == object.first_elim.pk %}
+                  <span class="badge bg-danger">First Eliminated</span>
+                {% endif %}
+
+                {% if object.winner and player_game.player.pk == object.winner.pk %}
+                  <span class="badge bg-success">Winner</span>
+                {% endif %}
+
+                {% if player_game.concede %}
+                  <span class="badge bg-warning text-dark">Conceded</span>
+                {% endif %}
+
+                {% if player_game.mulligan != player_game.MulliganCount.NONE %}
+                  <span class="badge bg-secondary">{{ player_game.get_mulligan_display }}</span>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      {% if object.notes %}
+      <hr>
+      <h5>Notes</h5>
+      <p>{{ object.notes|linebreaks }}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
