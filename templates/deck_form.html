@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  {% if deck.pk %}Edit Deck{% else %}Create Deck{% endif %}
+{% endblock title %}
+
+{% block content %}
+<h1>{% if deck.pk %}Edit Deck{% else %}New Deck{% endif %}</h1>
+<form method="post">{% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-success ms-2" type="submit">
+        {% if deck.pk %}Save{% else %}Create{% endif %}
+    </button>
+</form>
+{% endblock content %}

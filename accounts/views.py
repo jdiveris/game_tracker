@@ -1,5 +1,4 @@
-from django.views.generic.edit import CreateView, UpdateView
-from django.views.generic import DetailView
+from django.views.generic import CreateView, UpdateView, DetailView
 from django.urls import reverse_lazy
 from .forms import ProfileCreationForm
 from .models import Profile

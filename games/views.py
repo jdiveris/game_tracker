@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
 )
+from django.forms import DateInput
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy
@@ -42,6 +43,7 @@ class GameCreateView(LoginRequiredMixin, CreateView):
         "notes",
         "draw",
     )
+
     template_name = "game_form.html"
 
     def get_context_data(self, **kwargs):

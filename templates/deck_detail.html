@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Deck Info{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">
+                {{ deck.commander_name }}
+                {% if not deck.active %}
+                    <span class="badge bg-secondary ms-2">Inactive</span>
+                {% endif %}
+            </h3>
+            <small class="text-muted">Created by: {{ deck.created_by.display_name }}</small>
+        </div>
+        <div class="card-body">
+            <p><strong>Description:</strong> {{ deck.description|default:"No description." }}</p>
+            <hr>
+            <h5>Performance</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>Games Played:</strong> {{ deck.games_played|default:"0" }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Wins:</strong> {{ deck.wins|default:"0" }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Winrate:</strong> {{ deck.winrate|floatformat:2|default:"0.00" }}%
+                </li>
+            </ul>
+        </div>
+        <div class="card-footer text-end">
+            <a href="{% url 'deck_edit' pk=deck.pk %}" class="btn btn-outline-primary btn-sm">Edit</a>
+            <a href="{% url 'deck_delete' pk=deck.pk %}" class="btn btn-outline-danger btn-sm">Delete</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

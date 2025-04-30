@@ -1,6 +1,7 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from common.stats_services import get_annotated_decks, get_annotated_players
+from accounts.models import Profile
 from games.models import Game
 
 
@@ -64,11 +65,14 @@ class UserStatsPageView(LoginRequiredMixin, TemplateView):
         # Default the display to sort by winrate
         sort_by = self.request.GET.get("sort_by", "winrate")
 
+        # Get specific player object to display stats for
+        player_obj = Profile.objects.get(pk=self.kwargs["pk"])
+
         # Get player data from db
-        player = get_annotated_players(self.request.user).first()
+        player_stats = get_annotated_players(player_obj).first()
 
         # Get deck data from db
-        decks = get_annotated_decks(self.request.user)
+        decks = get_annotated_decks(player_obj)
 
         # Order the display based on sort selection (winrate is default)
         if sort_by == "winrate":
@@ -77,7 +81,7 @@ class UserStatsPageView(LoginRequiredMixin, TemplateView):
             decks = decks.order_by("-wins")
 
         # Add to context object
-        context["player_stats"] = player
+        context["player_stats"] = player_stats
         context["decks_stats"] = decks
 
         return context
