@@ -11,8 +11,10 @@ from common.stats_services import get_annotated_decks
 from .models import Deck
 
 
+# Deck Creation View
 class DeckCreateView(CreateView):
     model = Deck
+    # Only set commander and description, the rest is auto
     fields = ("commander_name", "description")
     template_name = "deck_form.html"
     context_object_name = "deck"
@@ -27,16 +29,18 @@ class DeckCreateView(CreateView):
         return super().form_valid(form)
 
 
+# A list view for all system decks
 class DeckListView(LoginRequiredMixin, ListView):
     model = Deck
     template_name = "deck_list.html"
-    paginate_by = 10
+    paginate_by = 10  # Paginate the results
     context_object_name = "deck_list"
 
 
+# A list view that filters decks for a specific user (current implementation is active user)
 class UserDeckListview(LoginRequiredMixin, ListView):
     model = Deck
-    template_name = "deck_list.html"
+    template_name = "deck_list.html"  # Use the same template as other deck list view
     paginate_by = 10
     context_object_name = "deck_list"
 
@@ -44,6 +48,7 @@ class UserDeckListview(LoginRequiredMixin, ListView):
         return Deck.objects.filter(created_by__pk=self.kwargs["pk"])
 
 
+# Detail view for more in depth deck data.
 class DeckDetailView(LoginRequiredMixin, DetailView):
     model = Deck
     template_name = "deck_detail.html"
@@ -52,6 +57,7 @@ class DeckDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # Get deck specific stats (num games, wins, winrate)
         deck = self.object
         deck = get_annotated_decks().filter(pk=deck.pk).first
 
@@ -59,10 +65,11 @@ class DeckDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
+# Deck Update View (with user auth)
 class DeckUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Deck
     fields = ("commander_name", "description", "active")
-    template_name = "deck_form.html"
+    template_name = "deck_form.html"  # Reuse deck creation template
     context_object_name = "deck"
 
     def get_success_url(self):
@@ -75,6 +82,7 @@ class DeckUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return deck.created_by == self.request.user
 
 
+# Deck Delete View (with user auth)
 class DeckDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Deck
     template_name = "deck_delete.html"

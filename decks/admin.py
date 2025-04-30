@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Deck
 
 
+# Display Deck details on the Admin page
 class DeckAdmin(admin.ModelAdmin):
     list_filter = [
         "created_by",

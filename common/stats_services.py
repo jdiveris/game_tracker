@@ -13,6 +13,7 @@ from django.db.models import (
 )
 
 
+# Helper function to create querysets for player win statistics
 def get_annotated_players(player_filter=None):
     # Get all Player objs
     qs = Profile.objects.filter(is_staff=False)
@@ -34,6 +35,7 @@ def get_annotated_players(player_filter=None):
     )
 
 
+# Helper function to create querysets for deck win statistics
 def get_annotated_decks(player_filter=None):
     # Get all Deck objs
     qs = Deck.objects.filter(active=True)

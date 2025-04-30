@@ -4,6 +4,7 @@ from decks.models import Deck
 from accounts.models import Profile
 
 
+# Filter to allow to select for games with a specific player in Admin
 class PlayerParticipationFilter(admin.SimpleListFilter):
     title = "Player"
     parameter_name = "player"
@@ -18,6 +19,7 @@ class PlayerParticipationFilter(admin.SimpleListFilter):
         return queryset
 
 
+# Filter to allow selection for games with specific decks in Admin
 class DeckParticipationFilter(admin.SimpleListFilter):
     title = "Deck Played"
     parameter_name = "deck"
@@ -32,11 +34,13 @@ class DeckParticipationFilter(admin.SimpleListFilter):
         return queryset
 
 
+# An inline Playergame class
 class PlayerGameInline(admin.TabularInline):
     model = PlayerGame
     extra = 1
 
 
+# A parent class to hold the inline Playergame
 class GameAdmin(admin.ModelAdmin):
     inlines = [PlayerGameInline]
     list_display = [
@@ -53,6 +57,7 @@ class GameAdmin(admin.ModelAdmin):
     ]
 
     def get_queryset(self, request):
+        # Get decks associated with this game
         return super().get_queryset(request).prefetch_related("player_games__deck")
 
     def decks_played(self, obj):

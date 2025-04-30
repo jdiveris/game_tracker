@@ -3,6 +3,7 @@ from django import forms
 from .models import Profile
 
 
+# Profile Creation form (signup) -- used in admin and web page
 class ProfileCreationForm(UserCreationForm):
     class Meta:
         model = Profile
@@ -15,6 +16,7 @@ class ProfileCreationForm(UserCreationForm):
         )
 
 
+# Form for user profile editing -- used in django admin
 class ProfileChangeForm(UserChangeForm):
     class Meta:
         model = Profile

@@ -10,6 +10,7 @@ from .models import Game
 from .forms import PlayerGameFormSet
 
 
+# List View for Game objects
 class GameListView(LoginRequiredMixin, ListView):
     model = Game
     template_name = "games_list.html"
@@ -17,6 +18,7 @@ class GameListView(LoginRequiredMixin, ListView):
     paginate_by = 10
 
 
+# Detail View for specific games with robust details
 class GameDetailView(LoginRequiredMixin, DetailView):
     model = Game
     template_name = "game_detail.html"
@@ -32,6 +34,7 @@ class GameDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
+# Game Creation View
 class GameCreateView(LoginRequiredMixin, CreateView):
     model = Game
     fields = (
@@ -44,7 +47,7 @@ class GameCreateView(LoginRequiredMixin, CreateView):
         "draw",
     )
 
-    template_name = "game_form.html"
+    template_name = "game_form.html"  # Same template as Updates
 
     def get_context_data(self, **kwargs):
         # Get context obj
@@ -76,6 +79,7 @@ class GameCreateView(LoginRequiredMixin, CreateView):
             return self.form_invalid(form)
 
 
+# Game Update View
 class GameUpdateView(LoginRequiredMixin, UpdateView):
     model = Game
     fields = (
@@ -119,7 +123,8 @@ class GameUpdateView(LoginRequiredMixin, UpdateView):
             return self.form_invalid(form)
 
 
+# View to delete games
 class GameDeleteView(LoginRequiredMixin, DeleteView):
     model = Game
-    template_name = "game_delete.html"
-    success_url = reverse_lazy("all_games")
+    template_name = "game_delete.html"  # Confirmation page
+    success_url = reverse_lazy("all_games")  # Redirect to games/list

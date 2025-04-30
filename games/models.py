@@ -1,6 +1,7 @@
 from django.db import models
 
 
+# Parent Game model with game outcome data
 class Game(models.Model):
     date = models.DateField()
     recorded_by = models.ForeignKey(
@@ -49,6 +50,7 @@ class Game(models.Model):
     def __str__(self):
         return f"{self.date} {self.id}"
 
+    # Custom property to simplify associating the specific winning deck to a Game
     @property
     def winning_deck(self):
         if self.winner:
@@ -56,9 +58,10 @@ class Game(models.Model):
             pg = self.player_games.filter(player=self.winner).first()
             if pg:
                 return pg.deck
-        return None
+        return None  # If no winner has been set (in case of draw), return nothing
 
 
+# Child Model to hold individual player info
 class PlayerGame(models.Model):
     class MulliganCount(models.IntegerChoices):
         NONE = 7, "None"

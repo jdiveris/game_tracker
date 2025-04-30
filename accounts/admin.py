@@ -6,6 +6,7 @@ from .forms import ProfileCreationForm, ProfileChangeForm
 from .models import Profile
 
 
+# Display User Profiles on the admin panel
 class ProfileAdmin(UserAdmin):
     add_form = ProfileCreationForm
     form = ProfileChangeForm
