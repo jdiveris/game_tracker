@@ -8,7 +8,7 @@ from .models import Profile
 class ProfileSignupView(CreateView):
     form_class = ProfileCreationForm  # Point to creation form
     success_url = reverse_lazy("login")  # Redirect to login
-    template_name = "signup.html"
+    template_name = "/registration/signup.html"
 
 
 # Detail view for basic account info
